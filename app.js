@@ -12,6 +12,9 @@ const index = require('./routes/index')
 const users = require('./routes/users')
 const blog = require('./routes/blog')
 const user = require('./routes/user')
+const path = require('path')
+const fs = require('fs')
+const morgan = require('koa-morgan')
 const {REDIS_CONFIG} = require('./config/conf')
 
 
@@ -30,6 +33,18 @@ app.use(views(__dirname + '/views', {
   extension: 'pug'
 }))
 
+const env = process.env.NODE_ENV
+if (env !== 'production') {
+  app.use(morgan('dev'));
+} else {
+  const logFileName = path.join(__dirname, 'log', 'access.log')
+  const writeStream = fs.createWriteStream(logFileName, {
+    flags: 'a'
+  })
+  app.use(morgan('combined', {
+    stream: writeStream
+  }))
+}
 // logger
 app.use(async (ctx, next) => {
   const start = new Date()

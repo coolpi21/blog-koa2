@@ -20,7 +20,7 @@ const getBlogDetail = async (id) => {
 
     const rows = await exec(sql)
     return rows[0]
-    
+
 }
 
 // 新建博客
