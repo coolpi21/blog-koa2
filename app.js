@@ -12,6 +12,7 @@ const index = require('./routes/index')
 const users = require('./routes/users')
 const blog = require('./routes/blog')
 const user = require('./routes/user')
+const {REDIS_CONFIG} = require('./config/conf')
 
 
 // error handler
@@ -45,7 +46,8 @@ app.use(session({
     maxAge: 24 * 60 * 60 * 1000
   },
   store: redis({
-    all: '127.0.0.1:6376' // 写死的本地端口
+    // all: '127.0.0.1:6376' // 写死的本地端口
+    all: `${REDIS_CONFIG.host}:${REDIS_CONFIG.port}`
   })
 }))
 
